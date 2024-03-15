@@ -1,0 +1,141 @@
+<div class="wrapper">
+  <aside id="sidebar" *ngIf="showSideenu">
+    <div class="d-flex">
+      <button class="toggle-btn" type="button">
+        <i class="bi bi-grid-fill"></i>
+      </button>
+      <div class="sidebar-logo">
+        <a (click)="changeRoute('/')">{{ userInfo?.Company }}</a>
+      </div>
+    </div>
+    <div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-item">
+          <a (click)="changeRoute('hospital')" class="sidebar-link">
+            <i class="bi bi-hospital"></i>
+            <span>Hospital Profile</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a (click)="changeRoute('fees')" class="sidebar-link">
+            <i class="bi bi-wallet"></i>
+            <span>Fees Master</span>
+          </a>
+        </li>
+        <!-- <li class="sidebar-item">
+          <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#auth"
+            aria-expanded="false" aria-controls="auth">
+            <i class="bi bi-shield-check"></i>
+            <span>Auth</span>
+          </a>
+          <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <li class="sidebar-item">
+              <a href="#" class="sidebar-link">Login</a>
+            </li>
+            <li class="sidebar-item">
+              <a href="#" class="sidebar-link">Register</a>
+            </li>
+          </ul>
+        </li> -->
+        <!-- <li class="sidebar-item">
+          <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#multi"
+            aria-expanded="false" aria-controls="multi">
+            <i class="bi bi-diagram-2"></i>
+            <span>Multi Level</span>
+          </a>
+          <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <li class="sidebar-item">
+              <a href="#" class="sidebar-link collapsed" data-bs-toggle="collapse" data-bs-target="#multi-two"
+                aria-expanded="false" aria-controls="multi-two">
+                Two Links
+              </a>
+              <ul id="multi-two" class="sidebar-dropdown list-unstyled collapse">
+                <li class="sidebar-item">
+                  <a href="#" class="sidebar-link">Link 1</a>
+                </li>
+                <li class="sidebar-item">
+                  <a href="#" class="sidebar-link">Link 2</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li> -->
+        <li class="sidebar-item">
+          <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#patient"
+            aria-expanded="false" aria-controls="patient">
+            <i class="bi bi-person-fill-add"></i>
+            <span>Patients</span>
+          </a>
+          <ul id="patient" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <li class="sidebar-item">
+              <a (click)="changeRoute('patient')" class="sidebar-link">Patients</a>
+            </li>
+            <li class="sidebar-item">
+              <a (click)="changeRoute('patient-add')" class="sidebar-link">Add Patient</a>
+            </li>
+          </ul>
+        </li>
+        <li class="sidebar-item">
+          <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#medicines"
+            aria-expanded="false" aria-controls="medicines">
+            <i class="bi bi-capsule"></i>
+            <span>Medicines</span>
+          </a>
+          <ul id="medicines" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <li class="sidebar-item">
+              <a (click)="changeRoute('medicines')" class="sidebar-link">Medicines</a>
+            </li>
+            <li class="sidebar-item">
+              <a (click)="changeRoute('medicine-add')" class="sidebar-link">Add Medicines</a>
+            </li>
+            <li class="sidebar-item">
+              <a (click)="changeRoute('medicine/company')" class="sidebar-link">Medicines Company</a>
+            </li>
+          </ul>
+        </li>
+
+
+        
+        <li class="sidebar-item">
+          <a (click)="changeRoute('uom')" class="sidebar-link">
+            <i class="bi bi-rulers"></i>
+            <span>Unit of Measurement</span>
+          </a>
+        </li>
+
+
+        <li class="sidebar-item">
+          <a (click)="changeRoute('cure')" class="sidebar-link">
+            <i class="bi bi-backpack"></i>
+            <span>Add Cure</span>
+          </a>
+        </li>
+
+
+        <li class="sidebar-item">
+          <a (click)="changeRoute('Dignosis')" class="sidebar-link">
+            <i class="bi bi-capsule-pill"></i>
+            <span>Doctor's Corner(diagnosis)</span>
+          </a>
+        </li>
+      </ul>
+      <div class="sidebar-footer">
+        <a (click)="logout()" class="sidebar-link">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+  <div class="main p-3">
+    <!-- <div class="text-center">
+      <h1>
+        Sidebar Bootstrap 5
+      </h1>
+    </div> -->
+  </div>
+</div>
+
+<ion-app>
+  <ion-router-outlet></ion-router-outlet>
+</ion-app>

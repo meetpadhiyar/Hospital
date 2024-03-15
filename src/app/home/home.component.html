@@ -1,0 +1,98 @@
+<ion-header class="ion-no-border ion-text-center">
+  <ion-toolbar color="purple">
+    <ion-label>Dashboard</ion-label>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col-md-4">
+        <ion-card color="primary">
+          <ion-card-header>
+            <ion-card-title>Total Patients</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>{{ widgets[0]?.TotalPatients }}</ion-card-content>
+        </ion-card>
+      </div>
+      <div class="col-md-4">
+        <ion-card color="purple">
+          <ion-card-header>
+            <ion-card-title>Medicine Companies</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>{{ widgets[0]?.TotalMedicineCompany }}</ion-card-content>
+        </ion-card>
+      </div>
+      <div class="col-md-4">
+        <ion-card color="success">
+          <ion-card-header>
+            <ion-card-title>Total Medicins</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>{{ widgets[0]?.TotalMedicine }}</ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <ion-card color="light">
+          <ion-card-header>
+            <ion-card-title>Patient Chart</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="chart-container">
+              <canvas #chartCanvas></canvas>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <ion-card>
+          <ion-card-header color="light">
+            <ion-card-title>Patients</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <table class="table table-striped table-bordered mt-2">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Age</th>
+                  <th scope="col">Disease</th>
+                  <th scope="col">Gender</th>
+                  <th scope="col">Weight</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (i of patientGrid; track i; let idx = $index) {
+                  <tr>
+                    <th scope="row">{{ idx + 1 }}</th>
+                    <td>{{ i?.FullName }}</td>
+                    <td>{{ i?.Age }}</td>
+                    <td>{{ i?.Disease }}</td>
+                    <td>{{ i?.Gender }}</td>
+                    <td>{{ i?.Weight }}</td>
+                  </tr>
+                }
+                @empty {
+                    <div class="text-center mt-2">
+                      <span>No data found</span>
+                    </div>
+                }
+              </tbody>
+            </table>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar class="ion-text-center">
+    <ion-note>copyright © 2024 all rights recived</ion-note>
+  </ion-toolbar>
+</ion-footer>

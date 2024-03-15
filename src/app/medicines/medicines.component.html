@@ -1,0 +1,131 @@
+<ion-header class="ion-no-border ion-text-center">
+  <ion-toolbar color="purple">
+    <ion-buttons slot="end">
+      <ion-button (click)="navCtrl.back()">
+        Go Back
+      </ion-button>
+    </ion-buttons>
+    <ion-label>Medicines</ion-label>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-3 ion-margin-top">
+        <ion-label>
+          <h1>Patient List</h1>
+        </ion-label>
+      </div>
+      <div class="col-md-3 offset-md-6">
+        <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
+      </div>
+
+      <div class="col-md-12 mt-2">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Medicine</th>
+              <th scope="col">Purchase rate</th>
+              <th scope="col">Sale rate</th>
+              <th scope="col">Expiray date</th>
+              <th scope="col">Minimum stock</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(i of tableDataCopy; track i; let idx = $index) {
+              <tr>
+                <th scope="row">{{ idx + 1 }}</th>
+                <td>{{ i?.MedicineName }}</td>
+                <td>{{ i?.PurchaseRate }}</td>
+                <td>{{ i?.PurchaseRate }}</td>
+                <td>{{ i?.ExpirayDate | date: 'dd-MM-yyyy' }}</td>
+                <td>{{ i?.MinimumStock }}</td>
+                <td>
+                  <ion-button fill="clear" (click)="setUpdateForm(i?.MedicineId)">
+                    <ion-icon name="pencil" color="danger"></ion-icon>
+                  </ion-button>
+                </td>
+              </tr>
+            }
+            @empty {
+              <div class="text-center mt-2">
+                <span>No data found</span>
+              </div>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <ion-modal trigger="open-modal" style="--width: 75%;">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="purple">
+          <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>Update Medicine</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="row">
+          <div class="col-md-12">
+            <ion-card>
+              <ion-card-header color="light">
+                <ion-card-title>Update Medicine details</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <form [formGroup]="updateForm" (ngSubmit)="validateUpdateForm()">
+                  <div class="row">
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="Medicin name" labelPlacement="floating" fill="outline" formControlName="MedicineName"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="Purchase rate" labelPlacement="floating" fill="outline" formControlName="PurchaseRate" type="number"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="Sales rate" labelPlacement="floating" fill="outline" formControlName="SaleRate" type="number"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="Discount" labelPlacement="floating" fill="outline" formControlName="Discount" type="number"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="Expiray Date" labelPlacement="floating" fill="outline" formControlName="ExpirayDate"  type="date"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-select formControlName="MedicineCompanyId" interface="popover" label="Medicine Company" labelPlacement="floating" fill="outline">
+                        @for (item of medicineCompanyDropdown; track $index) {
+                          <ion-select-option [value]="item?.MedicineId">{{ item?.Medicine }}</ion-select-option>
+                        }
+                      </ion-select>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-select formControlName="UoMId" interface="popover" label="Unit of measurement" labelPlacement="floating" fill="outline">
+                        @for (item of uomDropdown; track $index) {
+                          <ion-select-option [value]="item?.UOMId">{{ item?.UOM }}</ion-select-option>
+                        }
+                      </ion-select>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="Minimum Stock" labelPlacement="floating" fill="outline" formControlName="MinimumStock"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="Remark" labelPlacement="floating" fill="outline" formControlName="Remark"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-button color="purple" mode="ios" shape="round" type="submit">Update</ion-button>
+                    </div>
+                  </div>
+                </form>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

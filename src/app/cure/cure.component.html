@@ -1,0 +1,260 @@
+<ion-header class="ion-no-border ion-text-center">
+  <ion-toolbar color="purple">
+    <ion-buttons slot="end">
+      <ion-button (click)="navCtrl.back()">
+        Go back
+      </ion-button>
+    </ion-buttons>
+    <ion-label>Cure Detail</ion-label>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ion-card>
+          <ion-card-header color="light">
+            <ion-card-title>Add Cure Details</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <form [formGroup]="form" (ngSubmit)="validateForm()">
+              <div class="row">
+                <div class="col-md-3 mt-3">
+                  <ion-input type="text" label="Cure" labelPlacement="floating" fill="outline"
+                    formControlName="cure"></ion-input>
+                </div>
+
+                <div class="col-md-2 mt-3">
+                  <ion-input type="floating" label="From Age" labelPlacement="floating" fill="outline"
+                    formControlName="FromAge" type="number"></ion-input>
+                </div>
+
+
+                <div class="col-md-2 mt-3">
+                  <ion-input type="floating" label="To Age" labelPlacement="floating" fill="outline"
+                    formControlName="ToAge" type="number"></ion-input>
+                </div>
+
+                <div class="col-md-2 mt-3">
+                  <ion-label>
+                    <p>Gender</p>
+                    <ion-radio-group formControlName="Gender">
+                      <ion-radio class="me-2" value="1" labelPlacement="end">Male</ion-radio>
+                      <ion-radio value="2" labelPlacement="end">Female</ion-radio>
+                    </ion-radio-group>
+                  </ion-label>
+                </div>
+
+                <div class="col-md-3 mt-3">
+                  <ion-input type="text" label="Remark" labelPlacement="floating" fill="outline"
+                    formControlName="Remark"></ion-input>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12 mt-3 ion-text-center">
+                  <ion-button color="purple" mode="ios" shape="round" (click)="hideShowMedicines()">Add Medicines</ion-button>
+                  <ion-button color="purple" mode="ios" shape="round" type="submit">Add Cure</ion-button>
+                </div>
+              </div>
+            </form>
+
+            @if (showMedicines == true) {
+              <section class="mt-4">
+                <div class="row">
+                  <div class="col-md-3">
+                    <ion-searchbar placeholder="Search Medicine" (ionInput)="serachMedicine($event)"></ion-searchbar>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Medicine</th>
+                          <th scope="col">Company</th>
+                          <th scope="col">Purchase rate</th>
+                          <th scope="col">Sale rate</th>
+                          <th scope="col">UOM</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (i of medicinsDataCopy; track $index) {
+                          <tr>
+                            <th scope="row">
+                              <ion-checkbox color="purple" [(ngModel)]="i.checked"></ion-checkbox>
+                            </th>
+                            <td>{{ i.MedicineName }}</td>
+                            <td>{{ i.MedicineCompany }}</td>
+                            <td>{{ i.PurchaseRate }}</td>
+                            <td>{{ i.SaleRate }}</td>
+                            <td>{{ i.UOM }}</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+            }
+          </ion-card-content>
+        </ion-card>
+
+        <div class="row mt-3">
+          <div class="col-md-3 ion-margin-top">
+            <ion-label>
+              <h1>Cure List</h1>
+            </ion-label>
+          </div>
+          <div class="col-md-3 offset-md-6">
+            <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
+          </div>
+          <div class="col-md-12 mt-2">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Cure</th>
+                  <th scope="col">From Age</th>
+                  <th scope="col">To Age </th>
+                  <th scope="col">Gender </th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for(i of tableDataCopy; track i; let idx = $index) {
+                  <tr>
+                    <th scope="row">{{ idx + 1 }}</th>
+                    <td>{{ i?.cure }}</td>
+                    <td>{{ i?.FromAge }}</td>
+                    <td>{{ i?.ToAge }}</td>
+                    <td>{{ i?.Gender }}</td>
+                    <td>
+                      <ion-button fill="clear" (click)="setUpdateForm(i?.cureId)">
+                        <ion-icon name="pencil" color="danger"></ion-icon>
+                      </ion-button>
+                    </td>
+                  </tr>
+                }
+                @empty {
+                  <div class="text-center mt-2">
+                    <span>No data found</span>
+                  </div>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ion-modal style="--width: 75%;">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="purple">
+          <ion-buttons slot="end">
+            <ion-button (click)="closeModal()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>Update Cure</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="row">
+          <div class="col-md-12">
+            <ion-card>
+              <ion-card-header color="light">
+                <ion-card-title>Update Cure details</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <form [formGroup]="updateForm" (ngSubmit)="validateUpdateForm()">
+                  <div class="row">
+                    <div class="col-md-3 mt-3">
+                      <ion-input type="text" label="Cure" labelPlacement="floating" fill="outline"
+                        formControlName="cure"></ion-input>
+                    </div>
+    
+                    <div class="col-md-2 mt-3">
+                      <ion-input type="floating" label="From Age" labelPlacement="floating" fill="outline"
+                        formControlName="FromAge" type="number"></ion-input>
+                    </div>
+    
+    
+                    <div class="col-md-2 mt-3">
+                      <ion-input type="floating" label="To Age" labelPlacement="floating" fill="outline"
+                        formControlName="ToAge" type="number"></ion-input>
+                    </div>
+    
+                    <div class="col-md-2 mt-3">
+                      <ion-label>
+                        <p>Gender</p>
+                        <ion-radio-group formControlName="Gender">
+                          <ion-radio class="me-2" value="1" labelPlacement="end">Male</ion-radio>
+                          <ion-radio value="2" labelPlacement="end">Female</ion-radio>
+                        </ion-radio-group>
+                      </ion-label>
+                    </div>
+    
+                    <div class="col-md-3 mt-3">
+                      <ion-input type="text" label="Remark" labelPlacement="floating" fill="outline"
+                        formControlName="Remarks"></ion-input>
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-12 mt-3 ion-text-center">
+                      <ion-button color="purple" mode="ios" shape="round" (click)="hideShowUpdateMedicines()">Update Medicines</ion-button>
+                      <ion-button color="purple" mode="ios" shape="round" type="submit">Update Cure</ion-button>
+                    </div>
+                  </div>
+                </form>
+
+                @if (showUpdateMedicines == true) {
+                  <section class="mt-4">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <ion-searchbar placeholder="Search Medicine" (ionInput)="serachMedicine($event)"></ion-searchbar>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Medicine</th>
+                              <th scope="col">Company</th>
+                              <th scope="col">Purchase rate</th>
+                              <th scope="col">Sale rate</th>
+                              <th scope="col">UOM</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @for (i of medicinsDataCopy; track $index) {
+                              <tr>
+                                <th scope="row">
+                                  <ion-checkbox color="purple" [(ngModel)]="i.checked"></ion-checkbox>
+                                </th>
+                                <td>{{ i.MedicineName }}</td>
+                                <td>{{ i.MedicineCompany }}</td>
+                                <td>{{ i.PurchaseRate }}</td>
+                                <td>{{ i.SaleRate }}</td>
+                                <td>{{ i.UOM }}</td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </section>
+                }
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

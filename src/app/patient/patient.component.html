@@ -1,0 +1,163 @@
+<ion-header class="ion-no-border ion-text-center">
+  <ion-toolbar color="purple">
+    <ion-buttons slot="end">
+      <ion-button (click)="navCtrl.back()">
+        Go back
+      </ion-button>
+    </ion-buttons>
+    <ion-label>Patient Master</ion-label>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-3 ion-margin-top">
+        <ion-label>
+          <h1>Patient List</h1>
+        </ion-label>
+      </div>
+      <div class="col-md-3 offset-md-6">
+        <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
+      </div>
+
+      <div class="col-md-12 mt-2">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Desease</th>
+              <th scope="col">Mobile number</th>
+              <th scope="col">Fees</th>
+              <th scope="col">Checkup date</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(i of tableDataCopy; track i; let idx = $index) {
+            <tr>
+              <th scope="row">{{ idx + 1 }}</th>
+              <td>{{ i?.FullName }}</td>
+              <td>{{ i?.Disease }}</td>
+              <td>{{ i?.MobileNumber }}</td>
+              <td>{{ getFeesType(i?.FeesId) }}</td>
+              <td>{{ i?.CheckupDate | date: 'dd-MM-yyyy' }}</td>
+              <td>
+                <ion-button fill="clear" (click)="getPatientsById(i?.PatientId)">
+                  <ion-icon name="pencil" color="danger"></ion-icon>
+                </ion-button>
+              </td>
+            </tr>
+            }
+            @empty {
+            <div class="text-center mt-2">
+              <span>No data found</span>
+            </div>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <ion-modal trigger="open-modal" style="--width: 75%;">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="purple">
+          <ion-buttons slot="end">
+            <ion-button (click)="cancel()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>Update Patient</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="row">
+          <div class="col-md-12">
+            <ion-card>
+              <ion-card-header color="light">
+                <ion-card-title>Update patient details</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <form [formGroup]="form" (ngSubmit)="validateForm()">
+                  <div class="row">
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="Full name" labelPlacement="floating" fill="outline" formControlName="FullName"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="Disease" labelPlacement="floating" fill="outline" formControlName="Disease"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input type="number" label="Mobile number" labelPlacement="floating" fill="outline" formControlName="MobileNumber"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="City" labelPlacement="floating" fill="outline" formControlName="City"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <!-- <ion-input label="Gender" labelPlacement="floating" fill="outline" formControlName="Gender"></ion-input> -->
+                      <ion-select aria-label="Gender" interface="popover" label="Gender" labelPlacement="floating" fill="outline" formControlName="Gender">
+                        <ion-select-option value="m">Male</ion-select-option>
+                        <ion-select-option value="f">Female</ion-select-option>
+                        <ion-select-option value="o">Other</ion-select-option>
+                      </ion-select>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input type="number" label="Age" labelPlacement="floating" fill="outline" formControlName="Age"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input type="number" label="Height" labelPlacement="floating" fill="outline" formControlName="Height"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input type="number" label="Weight" labelPlacement="floating" fill="outline" formControlName="Weight"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-item lines="none">
+                        <ion-checkbox color="purple" labelPlacement="end" justify="start" formControlName="IsAnyDisease">Is any Disease</ion-checkbox>
+                      </ion-item>
+                    </div>
+                    @if (form.controls['IsAnyDisease'].value) {
+                      <div class="col-md-3 mt-3">
+                        <ion-input label="Other disease" labelPlacement="floating" fill="outline" formControlName="OtherDisease"></ion-input>
+                      </div>
+                    }
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="Partner name" labelPlacement="floating" fill="outline" formControlName="PartnerName"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input label="Remark" labelPlacement="floating" fill="outline" formControlName="Remark"></ion-input>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-select aria-label="Fees" interface="popover" label="Fees" labelPlacement="floating" fill="outline" formControlName="FeesId">
+                        @for (item of feesDropdown; track $index) {
+                          <ion-select-option [value]="item?.FeesId">{{ item?.Fees }}</ion-select-option>
+                        }
+                      </ion-select>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input type="date" label="Checkup date" labelPlacement="stacked" fill="outline" formControlName="CheckupDate"></ion-input>
+                          <!-- <ion-datetime-button datetime="datetime" class="mt-2 mb-2"></ion-datetime-button>
+                          
+                          <ion-modal [keepContentsMounted]="true">
+                            <ng-template>
+                              <ion-datetime id="datetime" formControlName="CheckupDate"></ion-datetime>
+                            </ng-template>
+                          </ion-modal> -->
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-item lines="none">
+                        <ion-checkbox color="purple" labelPlacement="end" justify="start" formControlName="IsEmergency">Is Emergency</ion-checkbox>
+                      </ion-item>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-button color="purple" mode="ios" shape="round" type="submit">Update Patient</ion-button>
+                    </div>
+                  </div>
+                </form>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

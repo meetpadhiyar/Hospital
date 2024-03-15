@@ -1,0 +1,123 @@
+<ion-header class="ion-no-border ion-text-center">
+  <ion-toolbar color="purple">
+    <ion-buttons slot="end">
+      <ion-button (click)="navCtrl.back()">
+        Go Back
+      </ion-button>
+    </ion-buttons>
+    <ion-label>Fees Master</ion-label>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col-md-12">
+        <ion-card>
+          <ion-card-header color="light">
+            <ion-card-title>Fees Form</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="form" (ngSubmit)="validateForm()">
+              <div class="row">
+                <div class="col-md-3 mt-3">
+                  <ion-input label="Fees" labelPlacement="floating" fill="outline" formControlName="Fees"></ion-input>
+                </div>
+                <div class="col-md-3 mt-3">
+                  <ion-input type="number" label="Fees Amount" labelPlacement="floating" fill="outline"
+                        formControlName="FeesAmount"></ion-input>
+                </div>
+                <div class="col-md-3 mt-3">
+                  <ion-button color="purple" mode="ios" shape="round" type="submit">Add Fees</ion-button>
+                </div>
+              </div>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+    <!-- <form [formGroup]="form" (ngSubmit)="validateForm()">
+      <div class="row">
+        <div class="col-md-3">
+          <ion-card>
+            <ion-card-content>
+              <ion-input label="Fees" labelPlacement="floating" fill="outline" formControlName="Fees"></ion-input>
+            </ion-card-content>
+          </ion-card>
+        </div>
+        <div class="col-md-3">
+          <ion-card>
+            <ion-card-content>
+              <ion-input type="number" label="Fees Amount" labelPlacement="floating" fill="outline"
+                formControlName="FeesAmount"></ion-input>
+            </ion-card-content>
+          </ion-card>
+        </div>
+        <div class="col-md-3">
+          <ion-button class="mt-4" color="purple" mode="ios" shape="round" type="submit">Add Fees</ion-button>
+        </div>
+      </div>
+    </form> -->
+
+    <div class="row mt-3">
+      <div class="col-md-3 ion-margin-top">
+        <ion-label>
+          <h1>Fees List</h1>
+        </ion-label>
+      </div>
+      <div class="col-md-3 offset-md-6">
+        <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
+      </div>  
+
+      <div class="col-md-12 mt-2">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Fees</th>
+              <th scope="col">Fees Amount</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(i of tableDataCopy; track i; let idx = $index) {
+              <tr>
+                <th scope="row">{{ idx + 1 }}</th>
+                @if (updateFeesId != i.FeesId) {
+                  <td>{{ i?.Fees }}</td>
+                  <td>{{ i?.FeesAmount }}</td>
+                  <td>
+                    <ion-button fill="clear" (click)="setUpdateForm(i?.FeesId)">
+                      <ion-icon name="pencil" color="danger"></ion-icon>
+                    </ion-button>
+                  </td>
+                }
+                @else {
+                    <td>
+                      <ion-input label="Fees" labelPlacement="floating" fill="outline" [(ngModel)]="updateModal.Fees"></ion-input>
+                    </td>
+                    <td>
+                      <ion-input label="Fees" labelPlacement="floating" fill="outline" type="number" [(ngModel)]="updateModal.FeesAmount"></ion-input>
+                    </td>
+                    <td>
+                      <ion-button fill="clear" (click)="update(i?.FeesId)">
+                        <ion-icon name="checkmark" color="purple"></ion-icon>
+                      </ion-button>
+                      <ion-button fill="clear" (click)="cancleUpdate()">
+                        <ion-icon name="close" color="danger"></ion-icon>
+                      </ion-button>
+                    </td>
+                }
+              </tr>
+            }
+            @empty {
+              <div class="text-center mt-2">
+                <span>No data found</span>
+              </div>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ion-content>

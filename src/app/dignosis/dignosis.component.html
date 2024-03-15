@@ -1,0 +1,155 @@
+<ion-header class="ion-no-border ion-text-center">
+  <ion-toolbar color="purple">
+    <ion-buttons slot="end">
+      <ion-button (click)="navCtrl.back()">
+        Go back
+      </ion-button>
+    </ion-buttons>
+    <ion-label>Dignosis Detail</ion-label>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ion-card>
+          <ion-card-header color="light">
+            <ion-card-title>Doctor's Corner</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="form">
+              <div class="row">
+                <div class="col-md-3 mt-3">
+                  <ion-select formControlName="PaitentyId" interface="popover" label="Patient"
+                    labelPlacement="floating" fill="outline">
+                    @for (item of paitentDropdown; track $index) {
+                      <ion-select-option [value]="item?.PatientId">{{ item?.Patient }}</ion-select-option>
+                    }
+                  </ion-select>
+                </div>
+                <div class="col-md-3 mt-3">
+                  <ion-input type="date" label="Checkup date" labelPlacement="floating" fill="outline"
+                    formControlName="CheckupDate"></ion-input>
+                </div>
+
+                <div class="col-md-6 mt-3">
+                  <ion-input type="text" label="Diagnosis" fill="outline" formControlName="Diagnosis" labelPlacement="floating"></ion-input>
+                </div>
+
+
+                <div class="col-md-6 mt-3">
+                  <ion-input type="text" label="Adviced" fill="outline" formControlName="Adviced" labelPlacement="floating"></ion-input>
+                </div>
+
+                <div class="col-md-3 mt-3">
+                  <ion-label>
+                    <p>Will Next Visit Required?</p>
+                    <ion-radio-group formControlName="IsNextVisitRequires">
+                      <ion-radio class="me-2" value="0" labelPlacement="end">YES</ion-radio>
+                      <ion-radio value="1" labelPlacement="end">NO</ion-radio>
+                    </ion-radio-group>
+                  </ion-label>
+                </div>
+
+                @if (showNextCheckupDateInput == true) {
+                  <div class="col-md-3 mt-3">
+                    <ion-input type="date" label="Checkup date" labelPlacement="stacked" fill="outline"
+                      formControlName="NextVisitDate"></ion-input>
+                  </div>
+                }
+                <!-- <div class="col-md-3 mt-3">
+                  <ion-button color="purple" mode="ios" shape="round" type="submit">Add Dignosis</ion-button>
+                </div> -->
+
+              </div>
+            </form>
+
+            <div class="row mt-3">
+              <div class="col-md-12">
+                <div class="form-floating mb-3">
+                  <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Search Medicine" (change)="medicinSelected($event)">
+                  <datalist id="datalistOptions">
+                    @for (item of medicineCompanyDropdown; track $index) {
+                      <option [value]="item?.Medicine"></option>
+                    }
+                  </datalist>
+                  <label for="exampleDataList">Select Medicine</label>
+                </div>
+              </div>
+              @if (showTimingINtakeDropdowns == true) {
+                <div class="col-md-4">
+                  <ion-select label="Timing" labelPlacement="floating" multiple interface="popover" fill="outline" [(ngModel)]="selectedTimings">
+                    <ion-select-option value="MorningMedicine">In Morning</ion-select-option>
+                    <ion-select-option value="NoonMedicine">In Noon</ion-select-option>
+                    <ion-select-option value="EveningMedicine">In Evening</ion-select-option>
+                    <ion-select-option value="NightMedicine">In Night</ion-select-option>
+                  </ion-select>
+                </div>
+                <div class="col-md-4">
+                  <ion-select label="Intake" labelPlacement="floating" interface="popover" fill="outline" [(ngModel)]="selectedIntake">
+                    @for (i of intakeDropdown; track $index) {
+                      <ion-select-option [value]="i?.IntakeId">{{ i?.Intake }}</ion-select-option>
+                    }
+                  </ion-select>
+                </div>
+                <div class="col-md-2">
+                  <ion-input type="number" label="Days" fill="outline" [(ngModel)]="Days" labelPlacement="floating"></ion-input>
+                </div>
+                <div class="col-md-2">
+                  <ion-input type="number" label="Quantity" fill="outline" [(ngModel)]="Qty" labelPlacement="floating"></ion-input>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <ion-input label="Remarks" fill="outline" [(ngModel)]="Remarks" labelPlacement="floating"></ion-input>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <ion-button color="purple" mode="ios" shape="round" (click)="addRowToTable()">Add Medicine</ion-button>
+                </div>
+                @if (selectedMedicineTable.length > 0) {
+                  <div class="col-md-12 text-center mt-3">
+                    <ion-button color="purple" mode="ios" shape="round" (click)="validateForm()">Add Dignosis</ion-button>
+                  </div>
+                }
+              }
+            </div>
+
+            <div class="row mt-5">
+              <div class="col-md-12">
+                <table class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Medicine</th>
+                      <th scope="col">In Morning</th>
+                      <th scope="col">In Noon</th>
+                      <th scope="col">In Evening</th>
+                      <th scope="col">In Night</th>
+                      <th scope="col">Intake</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for(i of selectedMedicineTable; track i; let idx = $index) {
+                      <tr>
+                        <th scope="row">{{ idx + 1 }}</th>
+                        <td>{{ i?.Medicine }}</td>
+                        <td>{{ i?.MorningMedicine == true ? 'Yes' : 'No' }}</td>
+                        <td>{{ i?.NoonMedicine == true ? 'Yes' : 'No' }}</td>
+                        <td>{{ i?.EveningMedicine == true ? 'Yes' : 'No' }}</td>
+                        <td>{{ i?.NightMedicine == true ? 'Yes' : 'No' }}</td>
+                        <td>{{ i?.Intake }}</td>
+                      </tr>
+                    }
+                    @empty {
+                      <div class="text-center mt-2">
+                        <span>No data found</span>
+                      </div>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </div>
+</ion-content>

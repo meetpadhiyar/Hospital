@@ -1,0 +1,71 @@
+<ion-header class="ion-no-border ion-text-center">
+  <ion-toolbar color="purple">
+    <ion-buttons slot="end">
+      <ion-button (click)="navCtrl.back()">
+        Go Back
+      </ion-button>
+    </ion-buttons>
+    <ion-label>Hospital</ion-label>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container mt-3">
+    <form [formGroup]="form" (ngSubmit)="validateForm()">
+      <div class="row">
+        <div class="col-md-12">
+          <ion-card>
+            <ion-card-header color="light">
+              <ion-card-title>Hospital Profile</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="row">
+                <div class="col-md-3 mt-3">
+                  <ion-input label="Hospital name" labelPlacement="floating" fill="outline"
+                    formControlName="companyName"></ion-input>
+                </div>
+                <div class="col-md-3 mt-3">
+                  <ion-input label="Phone number" labelPlacement="floating" fill="outline" type="number"
+                    formControlName="PhoneNumber1"></ion-input>
+                </div>
+                <div class="col-md-3 mt-3">
+                  <ion-input label="Phone number 2" labelPlacement="floating" fill="outline" type="number"
+                    formControlName="PhoneNumber2"></ion-input>
+                </div>
+                <div class="col-md-3 mt-3">
+                  <ion-input label="GST number" labelPlacement="floating" fill="outline"
+                    formControlName="GSTNumber"></ion-input>
+                </div>
+                <div class="col-md-6 mt-3">
+                  <ion-input label="Address" labelPlacement="floating" fill="outline"
+                    formControlName="Address"></ion-input>
+                </div>
+                <div class="col-md-6 mt-3">
+                  <ion-input label="Address 2" labelPlacement="floating" fill="outline"
+                    formControlName="Address2"></ion-input>
+                </div>
+                <div class="col-md-3 mt-3">
+                  <ion-input label="Pin code" labelPlacement="floating" fill="outline" type="number"
+                    formControlName="PinCode"></ion-input>
+                </div>
+                @if (file != '') {
+                  <div class="col-md-3 mt-3">
+                    <a [href]="file" target="_blank">View Logo</a>
+                  </div>
+                }
+                <div class="col-md-3 mt-3">
+                  <!-- <ion-input label="Hospital logo" labelPlacement="stacked" fill="outline" type="file"></ion-input> -->
+                  <input (change)="chooseImage($event)" class="form-control mt-2" type="file" id="formFile"
+                    accept=".png, .jpeg, .jpg" multiple="false">
+                </div>
+                <div class="col-md-3 mt-3">
+                  <ion-button color="purple" mode="ios" shape="round" type="submit">Update Hospital</ion-button>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+    </form>
+  </div>
+</ion-content>

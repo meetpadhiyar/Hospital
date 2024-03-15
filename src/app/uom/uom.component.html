@@ -1,0 +1,184 @@
+<ion-header class="ion-no-border ion-text-center">
+  <ion-toolbar color="purple">
+    <ion-buttons slot="end">
+      <ion-button (click)="navCtrl.back()">
+        Go back
+      </ion-button>
+    </ion-buttons>
+    <ion-label>Unit of Measurement</ion-label>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ion-card>
+          <ion-card-header color="light">
+            <ion-card-title>Add Unit of Measurement</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="form" (ngSubmit)="validateForm()">
+              <div class="row">
+                <div class="col-md-3 mt-3">
+                  <ion-label>
+                    <p>Unit</p>
+                    <ion-radio-group formControlName="isCompoundUnit">
+                      <ion-radio class="me-2" value="0" labelPlacement="end">Single Unit</ion-radio>
+                      <ion-radio value="1" labelPlacement="end">Compound Unit</ion-radio>
+                    </ion-radio-group>
+                  </ion-label>
+                </div>
+                <div class="col-md-3 mt-3">
+                  <ion-input type="number" label="Quantity per unit" labelPlacement="floating" fill="outline" formControlName="qtyPerUnit"></ion-input>
+                </div>
+                @if(form.controls['isCompoundUnit'].value == '0') {
+                  <div class="col-md-3 mt-3">
+                    <ion-input label="Unit of Measurement" labelPlacement="floating" fill="outline" formControlName="uom"></ion-input>
+                  </div>
+                }
+                @else {
+                  <div class="col-md-3 mt-3">
+                    <ion-select interface="popover" label="First Unit" labelPlacement="floating" fill="outline" formControlName="firstUnit">
+                      @for (item of unitDropdown; track $index) {
+                        <ion-select-option [value]="item?.UOMId">{{ item?.UOM }}</ion-select-option>
+                      }
+                    </ion-select>
+                  </div>
+                  <div class="col-md-3 mt-3">
+                    <ion-select interface="popover" label="Second Unit" labelPlacement="floating" fill="outline" formControlName="secondUnit">
+                      @for (item of unitDropdown; track $index) {
+                        <ion-select-option [value]="item?.UOMId">{{ item?.UOM }}</ion-select-option>
+                      }
+                    </ion-select>
+                  </div>
+                }
+                <div class="col-md-3 mt-3">
+                  <ion-button color="purple" mode="ios" shape="round" type="submit">Add Unit of Measurement</ion-button>
+                </div>
+              </div>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-md-3 ion-margin-top">
+        <ion-label>
+          <h1>UOM List</h1>
+        </ion-label>
+      </div>
+      <div class="col-md-3 offset-md-6">
+        <ion-searchbar (ionInput)="search($event)"></ion-searchbar>
+      </div>
+
+      <div class="col-md-12 mt-2">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Unit of measurement</th>
+              <th scope="col">Quantity per unit</th>
+              <th scope="col">Is Compound </th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(i of tableDataCopy; track i; let idx = $index) {
+            <tr>
+              <th scope="row">{{ idx + 1 }}</th>
+              <td>{{ i?.UOM }}</td>
+              <td>{{ i?.QtyPerUnit }}</td>
+              <td>
+                @if (i?.IsCompoundUnit == 'No') {
+                  <ion-badge color="danger" mode="ios">{{ i?.IsCompoundUnit }}</ion-badge>
+                }
+                @else {
+                  <ion-badge color="success" mode="ios">{{ i?.IsCompoundUnit }}</ion-badge>
+                }
+              </td>
+              <td>
+                <ion-button fill="clear" (click)="openUpdateModal(i?.UOMId)">
+                  <ion-icon name="pencil" color="danger"></ion-icon>
+                </ion-button>
+              </td>
+            </tr>
+            }
+            @empty {
+            <div class="text-center mt-2">
+              <span>No data found</span>
+            </div>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <ion-modal trigger="open-modal" style="--width: 75%;" #updateModal>
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="purple">
+          <ion-buttons slot="end">
+            <ion-button (click)="closeUpdateModal()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>Update Unit of Measurement</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="row">
+          <div class="col-md-12">
+            <ion-card>
+              <ion-card-header color="light">
+                <ion-card-title>Update Unit of Measurement details</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <form [formGroup]="updateForm" (ngSubmit)="validateUpdateForm()">
+                  <div class="row">
+                    <div class="col-md-3 mt-3">
+                      <ion-label>
+                        <p>Unit</p>
+                        <ion-radio-group formControlName="isCompoundUnit">
+                          <ion-radio class="me-2" value="0" labelPlacement="end">Single Unit</ion-radio>
+                          <ion-radio value="1" labelPlacement="end">Compound Unit</ion-radio>
+                        </ion-radio-group>
+                      </ion-label>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                      <ion-input type="number" label="Quantity per unit" labelPlacement="floating" fill="outline" formControlName="qtyPerUnit"></ion-input>
+                    </div>
+                    @if(updateForm.controls['isCompoundUnit'].value == '0') {
+                      <div class="col-md-3 mt-3">
+                        <ion-input label="Unit of Measurement" labelPlacement="floating" fill="outline" formControlName="uom"></ion-input>
+                      </div>
+                    }
+                    @else {
+                      <div class="col-md-3 mt-3">
+                        <ion-select interface="popover" label="First Unit" labelPlacement="floating" fill="outline" formControlName="firstUnit">
+                          @for (item of unitDropdown; track $index) {
+                            <ion-select-option [value]="item?.UOMId">{{ item?.UOM }}</ion-select-option>
+                          }
+                        </ion-select>
+                      </div>
+                      <div class="col-md-3 mt-3">
+                        <ion-select interface="popover" label="Second Unit" labelPlacement="floating" fill="outline" formControlName="secondUnit">
+                          @for (item of unitDropdown; track $index) {
+                            <ion-select-option [value]="item?.UOMId">{{ item?.UOM }}</ion-select-option>
+                          }
+                        </ion-select>
+                      </div>
+                    }
+                    <div class="col-md-3 mt-3">
+                      <ion-button color="purple" mode="ios" shape="round" type="submit">Update Unit of Measurement</ion-button>
+                    </div>
+                  </div>
+                </form>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
